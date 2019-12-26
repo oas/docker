@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: continuous-integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: continuous-integration
+  template:
+    metadata:
+      labels:
+        app: continuous-integration
+    spec:
+      containers:
+        - name: continuous-integration
+          image: jooas/ubuntu-ssh:20.04
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: docker-volume
+              mountPath: /var/run/docker.sock
+          ports:
+            - containerPort: 22
+      volumes:
+        - name: docker-volume
+          hostPath:
+            type: File
+            path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: continuous-integration
+spec:
+  type: LoadBalancer
+  selector:
+    app: continuous-integration
+  ports:
+    - protocol: TCP
+      port: 22
+      targetPort: 22

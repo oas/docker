@@ -1,3 +1,6 @@
+# docker build -t jooas/ubuntu-ssh:20.04 .
+# docker push jooas/ubuntu-ssh:20.04
+
 FROM ubuntu:20.04
 
 RUN apt-get update
@@ -10,7 +13,7 @@ RUN mkdir /root/.ssh
 RUN echo 'root:root' | chpasswd
 
 RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -ri 's/^#?ChallengeResponseAuthentication\s+.*/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+#RUN sed -ri 's/^#?ChallengeResponseAuthentication\s+.*/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
 #RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 CMD ["/usr/sbin/sshd", "-D"]
